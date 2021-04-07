@@ -114,6 +114,15 @@ class Post:
 
         conn.commit()
 
+    def _acquire_post(self):
+        conn, cur = get_connection()
+        cur.execute("""
+        SELECT p.title, p.content, u.handle FROM Post p INNER JOIN User u ON u.id = p.user_id WHERE p.id = ?
+        """, (self.post_id,))
+
+        self.post_title, self.post_content, creator = cur.fetchall()[0]
+        self.post_creator = User(creator)
+
 class Vote:
     def __init__(self, voter: User, post: Post, vote: int):
         self.voter = voter
@@ -157,3 +166,12 @@ class Vote:
         """, (self.vote, self.vote_id))
 
         conn.commit()
+
+def get_feed_posts(user_hash) -> [Post]:
+    conn, cur = get_connection()
+
+    cur.execute("""
+    SELECT p.post_id FROM Post p INNER JOIN User u ON p.user_id = u.id WHERE u.user_hash = ?
+    """, (user_hash,))
+
+    return [Post(i[0]) for i in cur.fetchall()]
