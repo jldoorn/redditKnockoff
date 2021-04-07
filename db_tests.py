@@ -3,6 +3,16 @@ from models import db_attachments as db
 
 
 class TestDB(unittest.TestCase):
+
+    def setUp(self) -> None:
+        conn, cur = db.get_connection()
+        cur.execute("""
+        DELETE FROM Post
+        """)
+        cur.execute("""DELETE FROM User""")
+        cur.execute("""DELETE FROM Vote""")
+        conn.commit()
+
     def test_user(self):
 
         with self.subTest('create user'):
