@@ -98,7 +98,7 @@ class Post:
         if len(args) == 1 and type(args[0]) is int:
             self.post_id = args[0]
         elif len(kwargs) == 3:
-            self.post_id = 0
+            self.post_id = None
             self.post_title = kwargs['title']
             self.post_content = kwargs['content']
             self.post_creator = kwargs['creator']
@@ -129,7 +129,7 @@ class Vote:
         self.post = post
         self.vote_id = -1
 
-        if not ((vote == 1) || (vote == -1)):
+        if not ((vote == 1) or (vote == -1)):
             raise ValueError("Post vote weight must be either +1 (Up) or -1 (Down)")
 
         self.vote = vote
