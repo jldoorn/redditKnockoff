@@ -1,6 +1,6 @@
 import unittest
 from models import db_attachments as db
-
+import uuid
 
 class TestDB(unittest.TestCase):
 
@@ -25,6 +25,12 @@ class TestDB(unittest.TestCase):
             userOld = db.User('technojd')
             self.assertEqual(userOld.user_id, userInit.user_id)
             self.assertEqual(userOld.user_hash, userInit.user_hash)
+
+        with self.subTest('reAccess hash'):
+            userHash = db.User.get_user_from_hash(userOld.user_hash)
+            self.assertEqual(userOld.user_id, userHash.user_id)
+            self.assertEqual(userOld.user_hash, userHash.user_hash)
+            self.assertEqual(userOld.handle, userHash.handle)
 
     def test_post(self):
 

@@ -17,16 +17,24 @@ class User:
     """
 
     def __init__(self, handle):
-        self.user_id = None    # User's database key
-        self.fname = None       # User's first name
-        self.lname = None       # User's last name
-        self.handle = handle    # User's tag visible to all
-        self.user_hash = None   # Unique user identifier
+        if type(handle) is str:
+            self.user_id = None    # User's database key
+            self.fname = None       # User's first name
+            self.lname = None       # User's last name
+            self.handle = handle    # User's tag visible to all
+            self.user_hash = None   # Unique user identifier
 
         if self.user_exists():
             self.acquire_user()
         else:
             self.init_user()
+
+    @classmethod
+    def get_user_from_hash(cls, user_hash: uuid.UUID):
+        conn, cur = get_connection()
+        cur.execute("""SELECT handle FROM User WHERE hash = ?""",
+                    (str(user_hash),))
+        return cls(cur.fetchall()[0][0])
 
     # Checks if this user exists
     def user_exists(self) -> bool:
@@ -98,11 +106,13 @@ class Post:
     def __init__(self, *args, **kwargs):
         if len(args) == 1 and type(args[0]) is int:
             self.post_id = args[0]
+            self._acquire_post()
         elif len(kwargs) == 3:
             self.post_id = None
             self.post_title = kwargs['title']
             self.post_content = kwargs['content']
             self.post_creator = kwargs['creator']
+            self._create_post()
         else:
             raise ValueError("Must pass either post id or title. content, creator to instantiate a Post")
 
