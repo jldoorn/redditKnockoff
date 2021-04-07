@@ -23,6 +23,11 @@ class User:
         self.handle = handle    # User's tag visible to all
         self.user_hash = None   # Unique user identifier
 
+        if self.user_exists():
+            self.acquire_user()
+        else:
+            self.init_user()
+
     # Checks if this user exists
     def user_exists(self) -> bool:
         conn, cur = get_connection()
@@ -46,9 +51,10 @@ class User:
         self.lname = results[2]
         self.user_hash = results[3]
 
-    def init_user(self, fname, lname):
+    def init_user(self, *args):
+        # *args may have fname, lastname
         self._make_hash()
-        self._set_names(fname, lname)
+        # self._set_names(fname, lname)
         self._create_user()
 
     def _create_user(self):
@@ -105,5 +111,49 @@ class Post:
         INSERT INTO Post(title, content, user_id) VALUES(?, ?, ?)
         """, (self.post_title, self.post_content, self.post_creator.user_id))
         self.post_id = cur.lastrowid
+
+        conn.commit()
+
+class Vote:
+    def __init__(self, voter: User, post: Post, vote: int):
+        self.voter = voter
+        self.post = post
+        self.vote_id = -1
+
+        if not ((vote == 1) || (vote == -1)):
+            raise ValueError("Post vote weight must be either +1 (Up) or -1 (Down)")
+
+        self.vote = vote
+
+        if self.vote_exits():
+            self._update_vote()
+        else:
+            self._create_vote()
+
+    def vote_exits(self):
+        conn, cur = get_connection()
+        cur.execute("""
+        SELECT vote_id FROM Vote WHERE user_id = ? and post_id = ?
+        """, (self.voter.user_id, self.post.post_id))
+        results = cur.fetchall()
+        if len(results) != 0:
+            self.vote_id = results[0][0]
+            return True
+        else:
+            return False
+
+    def _create_vote(self):
+        conn, cur = get_connection()
+        cur.execute("""
+        INSERT INTO Vote(user_id, post_id, vote_weight) VALUES (?, ?, ?)
+        """, (self.voter.user_id, self.post.post_id, self.vote))
+        conn.commit()
+        self.vote_id = cur.lastrowid
+
+    def _update_vote(self):
+        conn, cur = get_connection()
+        cur.execute("""
+        UPDATE Vote SET vote_weight = ? WHERE vote_id = ?
+        """, (self.vote, self.vote_id))
 
         conn.commit()
