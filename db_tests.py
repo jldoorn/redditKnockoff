@@ -17,7 +17,7 @@ class TestDB(unittest.TestCase):
 
         with self.subTest('create user'):
             userInit = db.User('technojd')
-            self.assertEqual(userInit.user_id, 'technojd')
+            self.assertEqual(userInit.handle, 'technojd')
             self.assertIsNotNone(userInit.user_hash)
             self.assertIsNotNone(userInit.user_id)
 

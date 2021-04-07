@@ -9,9 +9,9 @@ CREATE TABLE User (
 );
 CREATE TABLE Post (
 	post_id INTEGER PRIMARY KEY,
-	title TEXT ,
-	content TEXT ,
-	time_stamp TEXT ,
+	title TEXT,
+	content TEXT,
+	time_stamp TEXT,
 	post_user_id INTEGER,
 	CONSTRAINT fk_post_user_id
 	FOREIGN KEY (post_user_id)

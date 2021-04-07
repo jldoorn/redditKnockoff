@@ -21,5 +21,6 @@ def feed(user_hash):
     return [{
         'post_title': p.post_title,
         'post_content': p.post_content,
-        'post_creator': p.post_creator.handle
+        'post_creator': p.post_creator.handle,
+        'post_timestamp': p.post_timestamp
     } for p in posts]

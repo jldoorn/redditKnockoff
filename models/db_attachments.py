@@ -4,7 +4,7 @@ import time
 
 
 def get_connection() -> (sqlite3.Connection, sqlite3.Cursor):
-    connection = sqlite3.connect('database.db')
+    connection = sqlite3.connect('data/tables.db')
     return connection, connection.cursor()
 
 
@@ -41,7 +41,7 @@ class User:
     def acquire_user(self):
         conn, cur = get_connection()
         cur.execute("""
-        SELECT * FROM User where handle = ?
+        SELECT user_id, first_name, last_name, hash FROM User where handle = ?
         """, (self.handle,))
         results = cur.fetchall()[0]
 
@@ -49,7 +49,7 @@ class User:
         self.user_id = results[0]
         self.fname = results[1]
         self.lname = results[2]
-        self.user_hash = results[3]
+        self.user_hash = uuid.UUID(results[3])
 
     def init_user(self, *args):
         # *args may have fname, lastname
@@ -63,9 +63,10 @@ class User:
 
         conn, cur = get_connection()
         cur.execute("""
-        INSERT INTO User(fname, lname, handle, hash) VALUES (?, ?, ?, ?)
-        """, (self.fname, self.lname, self.handle, self.user_hash))
+        INSERT INTO User(first_name, last_name, handle, hash) VALUES (?, ?, ?, ?)
+        """, (self.fname, self.lname, self.handle, str(self.user_hash)))
         conn.commit()
+        self.user_id = cur.lastrowid
 
     def _make_hash(self):
         self.user_hash = uuid.uuid4()
@@ -108,7 +109,7 @@ class Post:
     def _create_post(self):
         conn, cur = get_connection()
         cur.execute("""
-        INSERT INTO Post(title, content, user_id) VALUES(?, ?, ?)
+        INSERT INTO Post(title, content, post_user_id) VALUES(?, ?, ?)
         """, (self.post_title, self.post_content, self.post_creator.user_id))
         self.post_id = cur.lastrowid
 
@@ -117,10 +118,12 @@ class Post:
     def _acquire_post(self):
         conn, cur = get_connection()
         cur.execute("""
-        SELECT p.title, p.content, u.handle FROM Post p INNER JOIN User u ON u.id = p.user_id WHERE p.id = ?
+        SELECT p.title, p.content, u.handle, p.time_stamp 
+        FROM Post p INNER JOIN User u ON u.user_id = p.post_user_id 
+        WHERE p.post_id = ?
         """, (self.post_id,))
 
-        self.post_title, self.post_content, creator = cur.fetchall()[0]
+        self.post_title, self.post_content, creator, self.post_timestamp = cur.fetchall()[0]
         self.post_creator = User(creator)
 
 class Vote:
@@ -142,7 +145,7 @@ class Vote:
     def vote_exits(self):
         conn, cur = get_connection()
         cur.execute("""
-        SELECT vote_id FROM Vote WHERE user_id = ? and post_id = ?
+        SELECT vote_id FROM Vote WHERE vote_user_id = ? and vote_post_id = ?
         """, (self.voter.user_id, self.post.post_id))
         results = cur.fetchall()
         if len(results) != 0:
@@ -154,7 +157,7 @@ class Vote:
     def _create_vote(self):
         conn, cur = get_connection()
         cur.execute("""
-        INSERT INTO Vote(user_id, post_id, vote_weight) VALUES (?, ?, ?)
+        INSERT INTO Vote(vote_user_id, vote_post_id, weight) VALUES (?, ?, ?)
         """, (self.voter.user_id, self.post.post_id, self.vote))
         conn.commit()
         self.vote_id = cur.lastrowid
@@ -162,7 +165,7 @@ class Vote:
     def _update_vote(self):
         conn, cur = get_connection()
         cur.execute("""
-        UPDATE Vote SET vote_weight = ? WHERE vote_id = ?
+        UPDATE Vote SET weight = ? WHERE vote_id = ?
         """, (self.vote, self.vote_id))
 
         conn.commit()
