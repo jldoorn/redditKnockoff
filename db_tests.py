@@ -42,6 +42,34 @@ class TestDB(unittest.TestCase):
             oldPost = db.Post(newPost.post_id)
             self.assertEqual(newPost.post_content, oldPost.post_content)
 
+    def test_retreival(self):
+
+        amanda = db.User('amanda')
+        mary = db.User('mary')
+
+        amandaPost1 = db.Post(title='First post', content='Amanda first post', creator=amanda)
+        amandaPost2 = db.Post(title='Second post', content='Amanda second post', creator=amanda)
+
+        maryPost1 = db.Post(title='First post', content='Mary first post', creator=mary)
+        maryPost2 = db.Post(title='Second post', content='Mary second post', creator=mary)
+
+        with self.subTest('check amanda posts'):
+            amandaPosts = db.get_profile_posts(amanda.user_hash)
+            self.assertEqual(amandaPost1.post_content, amandaPosts[0].post_content)
+            self.assertEqual(amandaPost2.post_content, amandaPosts[1].post_content)
+
+        with self.subTest('check mary posts'):
+            maryPosts = db.get_profile_posts(mary.user_hash)
+            self.assertEqual(maryPost1.post_content, maryPosts[0].post_content)
+            self.assertEqual(maryPost2.post_content, maryPosts[1].post_content)
+
+        with self.subTest('check feed posts amanda'):
+            amandaFeedPosts = db.get_feed_posts(amanda.user_hash)
+            # self.assertEqual(self.jdPost.post_content, amandaFeedPosts[0].post_content)
+            self.assertEqual(len(amandaFeedPosts), 2)
+            self.assertEqual(maryPost1.post_content, amandaFeedPosts[0].post_content)
+            self.assertEqual(maryPost2.post_content, amandaFeedPosts[1].post_content)
+
 
 if __name__ == '__main__':
     unittest.main()

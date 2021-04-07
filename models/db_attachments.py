@@ -180,11 +180,23 @@ class Vote:
 
         conn.commit()
 
-def get_feed_posts(user_hash) -> [Post]:
+
+def get_profile_posts(user_hash: uuid.UUID) -> [Post]:
     conn, cur = get_connection()
 
     cur.execute("""
-    SELECT p.post_id FROM Post p INNER JOIN User u ON p.user_id = u.id WHERE u.user_hash = ?
-    """, (user_hash,))
+    SELECT p.post_id FROM Post p INNER JOIN User u ON p.post_user_id = u.user_id WHERE u.hash = ?
+    """, (str(user_hash),))
+
+    return [Post(i[0]) for i in cur.fetchall()]
+
+
+def get_feed_posts(user_hash: uuid.UUID) -> [Post]:
+    conn, cur = get_connection()
+    cur.execute("""
+    SELECT p.post_id FROM Post p 
+    INNER JOIN User u ON p.post_user_id = u.user_id
+    WHERE u.hash != ?
+    """, (str(user_hash),))
 
     return [Post(i[0]) for i in cur.fetchall()]
