@@ -9,10 +9,10 @@
 <body>
     <div class="container-sm p-5 my-3 border">
         <h1>Create Your Post!</h1>
-        <form class="create-post" method="post" id="form">
-            <input type="text" placeholder="Insert Post Name Here" id="post_id" />
+        <form class="create-post" method="post" action="/{{ user_hash }}/create" id="form">
+            <input type="text" placeholder="Insert Post Name Here" name="post_title" id="post_title" />
             <br />
-            <textarea rows="10" cols="60" name="post_content"></textarea>
+            <textarea rows="10" cols="60" name="post_content" id="post_content"></textarea>
             <br /> 
             <input type="submit" value="Submit Post" />
         </form>

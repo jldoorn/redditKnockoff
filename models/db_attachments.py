@@ -136,6 +136,13 @@ class Post:
         self.post_title, self.post_content, creator, self.post_timestamp = cur.fetchall()[0]
         self.post_creator = User(creator)
 
+    def delete_post(self):
+        con, cur = get_connection()
+        cur.execute("""
+        DELETE FROM Post WHERE post_id = ?
+        """, (self.post_id,))
+        con.commit()
+
 class Vote:
     def __init__(self, voter: User, post: Post, vote: int):
         self.voter = voter

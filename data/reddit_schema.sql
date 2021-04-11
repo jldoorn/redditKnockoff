@@ -11,7 +11,7 @@ CREATE TABLE Post (
 	post_id INTEGER PRIMARY KEY,
 	title TEXT,
 	content TEXT,
-	time_stamp TEXT,
+	time_stamp TEXT DEFAULT CURRENT_TIMESTAMP,
 	post_user_id INTEGER,
 	CONSTRAINT fk_post_user_id
 	FOREIGN KEY (post_user_id)

@@ -25,7 +25,7 @@ def register():
         user = db.User(handle)
         return flask.redirect(f'/{user.user_hash}/profile')
 
-@app.route("/<user_hash>/feed", methods=['GET'])
+@app.route("/api/<user_hash>/feed", methods=['GET'])
 def feed(user_hash):
     posts = db.get_feed_posts(user_hash)
 
@@ -40,6 +40,12 @@ def feed(user_hash):
 @app.route("/<user_hash>/profile", methods=['GET'])
 def profile(user_hash):
     posts = db.get_profile_posts(user_hash)
+
+    return flask.render_template("profile.html", posts=posts, user_hash=user_hash)
+
+@app.route("/api/<user_hash>/profile", methods=['GET'])
+def api_profile(user_hash):
+    posts = db.get_profile_posts(user_hash)
     return flask.jsonify([{
         'post_title': p.post_title,
         'post_content': p.post_content,
@@ -48,13 +54,25 @@ def profile(user_hash):
         'post_id': p.post_id
     } for p in posts])
 
+@app.route("/<user_hash>/delete/<post_id>", methods=["POST"])
+def delete_post(user_hash, post_id):
+    post = db.Post(int(post_id))
+    if post.post_creator.user_hash == uuid.UUID(user_hash):
+        print("deleting post")
+        post.delete_post()
 
-@app.route("/<user_hash>/create", methods=['POST'])
+    return flask.redirect(f'/{user_hash}/profile')
+
+
+@app.route("/<user_hash>/create", methods=['GET','POST'])
 def create(user_hash):
-    user = db.User.get_user_from_hash(uuid.UUID(user_hash))
-    data = flask.request.get_json()
-    db.Post(content=data['content'], title=data['title'], creator=user)
-    return "OK"
+    if flask.request.method == "GET":
+        return flask.render_template("create.html", user_hash=user_hash)
+    else:
+        user = db.User.get_user_from_hash(uuid.UUID(user_hash))
+        # data = flask.request.get_json()
+        db.Post(content=flask.request.form['post_content'], title=flask.request.form['post_title'], creator=user)
+        return flask.redirect(f'/{user_hash}/profile')
 
 if __name__ == '__main__':
     app.run(port=8000, host='127.0.0.1', debug=True, use_evalex=False)
