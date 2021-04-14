@@ -36,7 +36,7 @@ jobs:
 #         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Source database
       run: |
-        sqlite3 data/tables.db < data/reddit_schema.sql
+        sqlite3 data/database.db < data/schema.sql
     - name: Test with pytest
       run: |
         pytest -v db_tests.py

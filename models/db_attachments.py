@@ -4,7 +4,7 @@ import time
 
 
 def get_connection() -> (sqlite3.Connection, sqlite3.Cursor):
-    connection = sqlite3.connect('data/tables.db')
+    connection = sqlite3.connect('data/database.db')
     return connection, connection.cursor()
 
 
