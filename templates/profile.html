@@ -80,7 +80,7 @@
     {% for post in posts %}
     <div class="container-sm p-5 my-3 border">
         <p class="username">{{ post.post_creator.handle }}</p>
-        <p class="votecount">{{ post.post_votes }}</p>
+        <p class="votecount">Votes: {{ post.post_votes }}</p>
         <p class="post_title"><a href="/posts/{{ post.post_id }}">{{ post.post_title }}</a></p>
         <p class="content">{{ post.post_content }}</p>
         <p class="time_stamp">{{ post.time_passed }}</p>
