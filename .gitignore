@@ -133,3 +133,4 @@ dmypy.json
 .idea/
 .vscode/
 data/tables.db
+/data/database.db
