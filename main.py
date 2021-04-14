@@ -95,5 +95,9 @@ def create(user_hash):
         db.Post(content=flask.request.form['post_content'], title=flask.request.form['post_title'], creator=user)
         return flask.redirect(f'/{user_hash}/profile')
 
+@app.route("/", methods=['GET'])
+def root():
+    return flask.redirect("/register")
+
 if __name__ == '__main__':
     app.run(port=8000, host='127.0.0.1', debug=True, use_evalex=False)

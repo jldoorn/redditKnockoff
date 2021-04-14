@@ -32,6 +32,11 @@ class TestDB(unittest.TestCase):
             self.assertEqual(userOld.user_hash, userHash.user_hash)
             self.assertEqual(userOld.handle, userHash.handle)
 
+        with self.subTest("invalid user"):
+            with self.assertRaises(KeyError):
+                db.User.get_user_from_hash(uuid.uuid4())
+
+
     def test_post(self):
 
         with self.subTest('create post'):
@@ -41,6 +46,10 @@ class TestDB(unittest.TestCase):
         with self.subTest('recall post'):
             oldPost = db.Post(newPost.post_id)
             self.assertEqual(newPost.post_content, oldPost.post_content)
+
+        with self.subTest("invalid post"):
+            with self.assertRaises(KeyError):
+                db.Post(123456)
 
     def test_retreival(self):
 
