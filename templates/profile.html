@@ -68,69 +68,70 @@
 </head>
 <body class="text-center" style="background-color:antiquewhite">
     <div class="container-fluid p-5 my-3 border">
-        <img class="logo" src="../images/big_r.jpg" alt="" width="72" height="72">
+        <img class="logo" src="{{ url_for('static', filename="../images/big_r.jpg") }}" alt="" width="72" height="72">
         <form class="feed-redirect" method="get" id="feed-redirect">
             <input type="submit" class="feed_button" value="Feed" />
         </form>
-        <form class="create_post-redirect" method="get" id="create_post-redirect">
+        <form method="get" action="/{{ user_hash }}/create" id="create_post-redirect">
             <input type="submit" class="create_post_button" value="Create Post" />
         </form>
     </div>
 
+    {% for post in posts %}
     <div class="container-sm p-5 my-3 border">
-        <p class="username">Username</p>
-        <p class="votecount">Vote Count</p>
-        <p class="post_title">Post Title</p>
-        <p class="content">Example content of post.</p>
-        <p class="time_stamp">Time of Post</p>
-        <form class="delete_post_redirect" method="post" id="delete_post_redirect">
+        <p class="username">{{ post.post_creator.handle }}</p>
+        <p class="votecount">Votes: {{ post.post_votes }}</p>
+        <p class="post_title"><a href="/posts/{{ post.post_id }}">{{ post.post_title }}</a></p>
+        <p class="content">{{ post.post_content }}</p>
+        <p class="time_stamp">{{ post.time_passed }}</p>
+        <form class="delete_post_redirect" method="post" action="/{{ user_hash }}/delete/{{ post.post_id }}" id="delete_post_redirect">
             <input type="submit" class="delete_post" value="Delete Post" />
         </form>
     </div>
+    {% endfor %}
+<!--    <div class="container-sm p-5 my-3 border">-->
+<!--        <p class="username">Username</p>-->
+<!--        <p class="votecount">Vote Count</p>-->
+<!--        <p class="post_title">Post Title</p>-->
+<!--        <p class="content">Example content of post.</p>-->
+<!--        <p class="time_stamp">Time of Post</p>-->
+<!--        <form class="delete_post_redirect" method="post" id="delete_post_redirect">-->
+<!--            <input type="submit" class="delete_post" value="Delete Post" />-->
+<!--        </form>-->
+<!--    </div>-->
 
-    <div class="container-sm p-5 my-3 border">
-        <p class="username">Username</p>
-        <p class="votecount">Vote Count</p>
-        <p class="post_title">Post Title</p>
-        <p class="content">Example content of post.</p>
-        <p class="time_stamp">Time of Post</p>
-        <form class="delete_post_redirect" method="post" id="delete_post_redirect">
-            <input type="submit" class="delete_post" value="Delete Post" />
-        </form>
-    </div>
+<!--    <div class="container-sm p-5 my-3 border">-->
+<!--        <p class="username">Username</p>-->
+<!--        <p class="votecount">Vote Count</p>-->
+<!--        <p class="post_title">Post Title</p>-->
+<!--        <p class="content">Example content of post.</p>-->
+<!--        <p class="time_stamp">Time of Post</p>-->
+<!--        <form class="delete_post_redirect" method="post" id="delete_post_redirect">-->
+<!--            <input type="submit" class="delete_post" value="Delete Post" />-->
+<!--        </form>-->
+<!--    </div>-->
 
-    <div class="container-sm p-5 my-3 border">
-        <p class="username">Username</p>
-        <p class="votecount">Vote Count</p>
-        <p class="post_title">Post Title</p>
-        <p class="content">Example content of post.</p>
-        <p class="time_stamp">Time of Post</p>
-        <form class="delete_post_redirect" method="post" id="delete_post_redirect">
-            <input type="submit" class="delete_post" value="Delete Post" />
-        </form>
-    </div>
+<!--    <div class="container-sm p-5 my-3 border">-->
+<!--        <p class="username">Username</p>-->
+<!--        <p class="votecount">Vote Count</p>-->
+<!--        <p class="post_title">Post Title</p>-->
+<!--        <p class="content">Example content of post.</p>-->
+<!--        <p class="time_stamp">Time of Post</p>-->
+<!--        <form class="delete_post_redirect" method="post" id="delete_post_redirect">-->
+<!--            <input type="submit" class="delete_post" value="Delete Post" />-->
+<!--        </form>-->
+<!--    </div>-->
 
-    <div class="container-sm p-5 my-3 border">
-        <p class="username">Username</p>
-        <p class="votecount">Vote Count</p>
-        <p class="post_title">Post Title</p>
-        <p class="content">Example content of post.</p>
-        <p class="time_stamp">Time of Post</p>
-        <form class="delete_post_redirect" method="post" id="delete_post_redirect">
-            <input type="submit" class="delete_post" value="Delete Post" />
-        </form>
-    </div>
-
-    <div class="container-sm p-5 my-3 border">
-        <p class="username">Username</p>
-        <p class="votecount">Vote Count</p>
-        <p class="post_title">Post Title</p>
-        <p class="content">Example content of post.</p>
-        <p class="time_stamp">Time of Post</p>
-        <form class="delete_post_redirect" method="post" id="delete_post_redirect">
-            <input type="submit" class="delete_post" value="Delete Post" />
-        </form>
-    </div>
+<!--    <div class="container-sm p-5 my-3 border">-->
+<!--        <p class="username">Username</p>-->
+<!--        <p class="votecount">Vote Count</p>-->
+<!--        <p class="post_title">Post Title</p>-->
+<!--        <p class="content">Example content of post.</p>-->
+<!--        <p class="time_stamp">Time of Post</p>-->
+<!--        <form class="delete_post_redirect" method="post" id="delete_post_redirect">-->
+<!--            <input type="submit" class="delete_post" value="Delete Post" />-->
+<!--        </form>-->
+<!--    </div>-->
 
 </body>
 </html>

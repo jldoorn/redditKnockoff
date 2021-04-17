@@ -1,17 +1,17 @@
 PRAGMA foreign_keys = ON;
 CREATE TABLE User (
 	user_id INTEGER PRIMARY KEY,
-	handle TEXT NOT NULL,
-	hash INT NOT NULL,
-	first_name TEXT NOT NULL,
-	last_name TEXT NOT NULL,
-	profile_path TEXT NOT NULL
+	handle TEXT ,
+	hash INT ,
+	first_name TEXT ,
+	last_name TEXT ,
+	profile_path TEXT 
 );
 CREATE TABLE Post (
 	post_id INTEGER PRIMARY KEY,
-	title TEXT NOT NULL,
-	content TEXT NOT NULL,
-	time_stamp TEXT NOT NULL,
+	title TEXT,
+	content TEXT,
+	time_stamp TEXT DEFAULT CURRENT_TIMESTAMP,
 	post_user_id INTEGER,
 	CONSTRAINT fk_post_user_id
 	FOREIGN KEY (post_user_id)
@@ -19,7 +19,7 @@ CREATE TABLE Post (
 );
 CREATE TABLE Vote (
 	vote_id INTEGER PRIMARY KEY,
-        weight INTEGER NOT NULL,
+        weight INTEGER ,
 	vote_user_id INTEGER,
         vote_post_id INTEGER,
 	CONSTRAINT fk_vote_user_id
