@@ -25,17 +25,18 @@ def register():
         user = db.User(handle)
         return flask.redirect(f'/{user.user_hash}/profile')
 
-@app.route("/api/<user_hash>/feed", methods=['GET'])
+@app.route("/<user_hash>/feed", methods=['GET'])
 def feed(user_hash):
     posts = db.get_feed_posts(user_hash)
 
-    return flask.jsonify([{
-        'post_title': p.post_title,
-        'post_content': p.post_content,
-        'post_creator': p.post_creator.handle,
-        'post_timestamp': p.post_timestamp,
-        'post_id': p.post_id
-    } for p in posts])
+    # return flask.jsonify([{
+    #     'post_title': p.post_title,
+    #     'post_content': p.post_content,
+    #     'post_creator': p.post_creator.handle,
+    #     'post_timestamp': p.post_timestamp,
+    #     'post_id': p.post_id
+    # } for p in posts])
+    return flask.render_template('feed.html', user_hash=user_hash, posts=posts)
 
 
 @app.route("/posts/<post_id>", methods=['GET'])
@@ -45,14 +46,15 @@ def post(post_id):
     except KeyError:
         return flask.abort(404)
 
-    return {
-        'post_id': p.post_id,
-        'post_timestamp': p.post_timestamp,
-        'post_creator': p.post_creator.handle,
-        'post_title': p.post_title,
-        'post_content': p.post_content,
-        "post_votes": p.post_votes
-    }
+    # return {
+    #     'post_id': p.post_id,
+    #     'post_timestamp': p.post_timestamp,
+    #     'post_creator': p.post_creator.handle,
+    #     'post_title': p.post_title,
+    #     'post_content': p.post_content,
+    #     "post_votes": p.post_votes
+    # }
+    return flask.render_template("post.html", post=p)
 
 
 @app.route("/<user_hash>/profile", methods=['GET'])
