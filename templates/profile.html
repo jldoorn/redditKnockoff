@@ -1,45 +1,5 @@
 ﻿<!DOCTYPE html>
 <style>
-.username {
-    position: relative;
-    left: -30px;
-    top: -40px;
-    float: left;
-}
-
-.votecount {
-    position: relative;
-    left: -100px;
-    top: 60px;
-    float: left;
-}
-
-.post_title {
-    position: relative;
-    top: -40px;
-    float: left;
-}
-
-.content {
-    position: relative;
-    left: -500px;
-    top: 20px;
-}
-
-.time_stamp {
-    position: relative;
-    top: -80px;
-    right: -20px;
-    float: right;
-}
-
-.delete_post {
-    position: relative;
-    top: 15px;
-    right: -110px;
-    float: right;
-}
-
 .logo {
     position: absolute;
     top: 30px;
@@ -66,7 +26,7 @@
     <meta charset="utf-8" />
     <title></title>
 </head>
-<body class="text-center" style="background-color:antiquewhite">
+<body class="text-center" style="background-color:white">
     <div class="container-fluid p-5 my-3 border">
         <img class="logo" src="{{ url_for('static', filename="../images/big_r.jpg") }}" alt="" width="72" height="72">
         <form class="feed-redirect" method="get" id="feed-redirect">
@@ -78,15 +38,28 @@
     </div>
 
     {% for post in posts %}
-    <div class="container-sm p-5 my-3 border">
-        <p class="username">{{ post.post_creator.handle }}</p>
-        <p class="votecount">Votes: {{ post.post_votes }}</p>
-        <p class="post_title"><a href="/posts/{{ post.post_id }}">{{ post.post_title }}</a></p>
-        <p class="content">{{ post.post_content }}</p>
-        <p class="time_stamp">{{ post.time_passed }}</p>
-        <form class="delete_post_redirect" method="post" action="/{{ user_hash }}/delete/{{ post.post_id }}" id="delete_post_redirect">
-            <input type="submit" class="delete_post" value="Delete Post" />
-        </form>
+    <div class="container">
+        <div class="card shadow">
+            <div class="card-body">
+                <div class="row align-items-start">
+                    <div class="col">{{ post.post_creator.handle }}</div>
+                    <div class="col"><a href="/posts/{{ post.post_id }}">{{ post.post_title }}</a></div>
+                    <div class="col">Votes:{{ post.post_votes }}</div>
+                </div>
+                <div class="row align-items-start">
+                    <div class="col">{{ post.post_content }}</div>
+                </div>
+            </div>
+            <div class="card-footer text-muted">
+                <div class="row">
+                    <div class="col">{{ post.time_passed }}</div>
+
+                </div>
+                <form class="delete_post_redirect" method="post" action="/{{ user_hash }}/delete/{{ post.post_id }}" id="delete_post_redirect">
+                    <button class="btn btn-primary float-end">Delete Post</button>
+                </form>
+            </div>
+        </div>
     </div>
     {% endfor %}
 <!--    <div class="container-sm p-5 my-3 border">-->

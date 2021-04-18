@@ -1,4 +1,23 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
+<style>
+    .logo {
+        position: absolute;
+        top: 30px;
+        left: 15px;
+    }
+
+    .feed_button {
+        position: absolute;
+        top: 80px;
+        left: 100px;
+    }
+
+    .create_post_button {
+        position: absolute;
+        top: 80px;
+        right: 100px;
+    }
+</style>
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -7,6 +26,14 @@
     <title></title>
 </head>
 <body class="text-center" style="background-color:white">
+    <div class="container-fluid p-5 my-3 border">
+        <img class="logo" src="{{ url_for('static', filename="../images/big_r.jpg") }}" alt="" width="72" height="72">
+        <form method="get" action="/{{ user_hash }}/profile" id="profile-redirect">
+            <button class="btn btn-primary float-end">Profile</button>
+        </form>
+    </div>
+
+    {% for post in posts %}
     <div class="container">
         <div class="card shadow">
             <div class="card-body">
@@ -22,12 +49,11 @@
             <div class="card-footer text-muted">
                 <div class="row">
                     <div class="col">{{ post.time_passed }}</div>
-
                 </div>
             </div>
         </div>
     </div>
-
+    {% endfor %}
 
 </body>
 </html>
