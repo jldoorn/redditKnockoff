@@ -8,14 +8,14 @@
 
 .feed_button {
     position: absolute;
-    top: 80px;
+    top: 50px;
     left: 100px;
 }
 
 .create_post_button {
     position: absolute;
-    top: 80px;
-    right: 100px;
+    top: 50px;
+    right:50px;
 }
 
 </style>
@@ -23,18 +23,19 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+
     <meta charset="utf-8" />
     <title></title>
 </head>
 <body class="text-center" style="background-color:white">
     <div class="container-fluid p-5 my-3 border">
         <img class="logo" src="{{ url_for('static', filename="../images/big_r.jpg") }}" alt="" width="72" height="72">
-        <form class="feed-redirect" method="get" id="feed-redirect">
-            <input type="submit" class="feed_button" value="Feed" />
-        </form>
-        <form method="get" action="/{{ user_hash }}/create" id="create_post-redirect">
-            <input type="submit" class="create_post_button" value="Create Post" />
-        </form>
+         <a href="/{{ user_hash }}/feed" class="btn btn-primary feed_button">Feed</a>
+{#        <form method="get" action="/{{ user_hash }}/create" id="create_post-redirect">#}
+{#            <input type="submit" class="create_post_button" value="Create Post" />#}
+{#        </form>#}
+         <a href="/{{ user_hash }}/create" class="btn btn-primary create_post_button">Create</a>
+        <a class="btn"><i class="bi bi-arrow-90deg-right"></i></a>
     </div>
 
     {% for post in posts %}
