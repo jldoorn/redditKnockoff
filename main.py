@@ -73,10 +73,14 @@ def profile(user_hash):
 def postVote(user_hash, post_id, direction):
     if direction == "up":
         db.Vote(db.User.get_user_from_hash(uuid.UUID(user_hash)), db.Post(int(post_id)), 1)
-        return flask.redirect("/"+user_hash+"/feed")
+        return {
+            "tally": db.Post(int(post_id)).post_votes
+        }
     elif direction == "down":
         db.Vote(db.User.get_user_from_hash(uuid.UUID(user_hash)), db.Post(int(post_id)), -1)
-        return flask.redirect("/" + user_hash + "/feed")
+        return {
+                    "tally": db.Post(int(post_id)).post_votes
+                }
     else:
         return flask.abort(404)
 
