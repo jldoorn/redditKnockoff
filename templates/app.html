@@ -40,9 +40,10 @@
 
     {% raw %}
     <div id="app">
-        <post-item v-for="p in post"
-                    v-bind:key="p.id"
-                    v-bind:post="p"></post-item>
+<!--        <post-item v-for="p in post"-->
+<!--                    v-bind:key="p.id"-->
+<!--                    v-bind:post="p"></post-item>-->
+        <pagination v-bind:pdata="post"></pagination>
 
     </div>
     {% endraw %}
