@@ -15,7 +15,7 @@ CREATE TABLE Post (
 	post_user_id INTEGER,
 	CONSTRAINT fk_post_user_id
 	FOREIGN KEY (post_user_id)
-	REFERENCES User(user_id)
+	REFERENCES User(user_id) ON DELETE CASCADE
 );
 CREATE TABLE Vote (
 	vote_id INTEGER PRIMARY KEY,
@@ -24,8 +24,8 @@ CREATE TABLE Vote (
         vote_post_id INTEGER,
 	CONSTRAINT fk_vote_user_id
 	FOREIGN KEY (vote_user_id)
-	REFERENCES User(user_id),
+	REFERENCES User(user_id) ON DELETE CASCADE ,
 	CONSTRAINT fk_vote_post_id
 	FOREIGN KEY (vote_post_id)
-	REFERENCES Post(post_id)
+	REFERENCES Post(post_id) ON DELETE CASCADE
 );
