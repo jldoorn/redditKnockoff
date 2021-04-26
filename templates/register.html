@@ -13,20 +13,15 @@
     <title></title>
 </head>
 <body class="text-center" style="background-color:antiquewhite">
-    <form class="form-signin" method="post" action="/register" id="form">
+    <form enctype="multipart/form-data" class="form-signin" method="post" action="/register" id="form">
         <img class="mb-4" src="{{ url_for('static', filename="../static/images/big_r.jpg") }}" alt="" width="72" height="72">
         <h1 class="h3 mb-3 font-weight normal">Please Enter Your RedditKnockoff User Handle</h1>
         <input type="text" placeholder="@username" value="" name="handle" id="handle" />
-        <input type="submit">
-    </form>
-
-    <form>
         <br />
-        <h2 class="h3 mb-3 font-weight normal">Submit Profile Picture</h2>    
-        <div class="file">
-            <input type="file" accept=".jpg,.gif,.png" class="custom-file-input" id="customFile">
-            <label class="custom-file-label" for="customFile"></label>
-        </div>
+            <label for="profpic">Profile Picture</label>
+            <input type="file" accept="image/*" id="profpic" name="profpic">
+
+        <input type="submit">
     </form>
 </body>
 </html>

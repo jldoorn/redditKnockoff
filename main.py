@@ -2,9 +2,11 @@ import flask
 from http import HTTPStatus
 from models import db_attachments as db
 import uuid
+import os
 
 app = flask.Flask(__name__, static_folder="static")
 app.config['CLIENT_TSV'] = './data/tsvfiles'
+app.config['CLIENT_IMAGE'] = './data/uploads'
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -12,7 +14,11 @@ def register():
         return flask.render_template("register.html")
     elif flask.request.method == "POST":
         handle = flask.request.form['handle']
+        file = flask.request.files['profpic']
         user = db.User(handle)
+        if file.filename != "":
+            filename = f'{user.user_hash}.png'
+            file.save(os.path.join(app.config['CLIENT_IMAGE'], filename))
         return flask.redirect(f'/app/feed/{user.user_hash}')
 
 @app.route("/posts/<post_id>", methods=['GET'])
@@ -125,6 +131,10 @@ def tsvdownload(tsvtype):
 @app.route("/gettsv/download/<path:tsvpath>", methods=['GET'])
 def downloadpath(tsvpath):
     return flask.send_from_directory(app.config['CLIENT_TSV'], tsvpath)
+
+@app.route("/image/<path:imagepath>")
+def getimage(imagepath):
+    return flask.send_from_directory(app.config['CLIENT_IMAGE'], imagepath)
 
 if __name__ == '__main__':
     app.run(port=8000, host='127.0.0.1', debug=True, use_evalex=False)

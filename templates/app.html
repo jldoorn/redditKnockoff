@@ -52,9 +52,22 @@
 
     {% if not feed %}
     <div class="container-fluid p-5 my-3 border">
-        <img class="logo" src="{{ url_for('static', filename="../static/images/big_r.jpg") }}" alt="" width="72" height="72">
-         <a href="/app/feed/{{ user_hash }}" class="btn btn-primary feed_button">Feed</a>
-         <a href="/{{ user_hash }}/create" class="btn btn-primary create_post_button">Create</a>
+
+        <div class="row">
+            <div class="col">
+                <img class="logo" src="{{ url_for('static', filename="../static/images/big_r.jpg") }}" alt="" width="72" height="72">
+            </div>
+            <div class="col">
+                <a href="/app/feed/{{ user_hash }}" class="btn btn-primary feed_button">Feed</a>
+
+            </div>
+            <div class="col">
+                <img class="float-end" src="/image/{{ user_hash }}.png" height="40px" alt="user image">
+            </div>
+            <div class="col">
+                <a href="/{{ user_hash }}/create" class="btn btn-primary create_post_button">Create</a>
+            </div>
+        </div>
     </div>
 
     <div id="app">
