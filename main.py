@@ -4,6 +4,7 @@ from models import db_attachments as db
 import uuid
 
 app = flask.Flask(__name__, static_folder="static")
+app.config['CLIENT_TSV'] = './data/tsvfiles'
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -101,6 +102,29 @@ def apprtprofile(user_hash):
 @app.route("/app/feed/<user_hash>", methods=['GET'])
 def apprtfeed(user_hash):
     return flask.render_template("app.html", user_hash=user_hash, feed=True)
+
+@app.route("/gettsv", methods=['GET'])
+def tsvpage():
+    return flask.render_template("gettsv.html")
+
+
+@app.route("/gettsv/<tsvtype>", methods=['GET'])
+def tsvdownload(tsvtype):
+    if tsvtype == 'user':
+        db.User.savealluser('data/tsvfiles/user.tsv')
+        return flask.redirect('/gettsv/download/user.tsv')
+    elif tsvtype == 'post':
+        db.Post.saveallpost('data/tsvfiles/post.tsv')
+        return flask.redirect('/gettsv/download/post.tsv')
+    elif tsvtype == 'vote':
+        db.Vote.saveallvote('data/tsvfiles/vote.tsv')
+        return flask.redirect('/gettsv/download/vote.tsv')
+    else:
+        return flask.abort(404)
+
+@app.route("/gettsv/download/<path:tsvpath>", methods=['GET'])
+def downloadpath(tsvpath):
+    return flask.send_from_directory(app.config['CLIENT_TSV'], tsvpath)
 
 if __name__ == '__main__':
     app.run(port=8000, host='127.0.0.1', debug=True, use_evalex=False)
