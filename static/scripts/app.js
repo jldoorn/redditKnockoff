@@ -78,8 +78,17 @@ Vue.component('pagination',
                           v-on:upvote="upvote"
                           v-on:downvote="downvote"
                           v-on:deletepost="deletepost"></post-item>
-            <button v-on:click="prevpage">Prev page</button>
-            <button v-on:click="nextpage">Next page</button>
+            <nav aria-label="...">
+            <ul class="pagination">
+            <li class="page-item">
+            <a href="#" v-on:click="prevpage" class="page-link">Previous</a>
+</li>
+<li class="page-item">
+<a href="#" v-on:click="nextpage" class="page-link">Next</a>
+</li>
+</ul>
+</nav>
+           
             </div>
             
           </div>
@@ -94,79 +103,6 @@ Vue.component('pagination',
             fetch('/api/'+USERHASH+"/"+handle)
                 .then(response => response.json())
                 .then(data => (this.initData(data)));
-            // this.pdata = [{
-            //     handle: "technojd",
-            //     post_content: "Hurray this is my first post",
-            //     post_creator: "technojd",
-            //     post_id: 1,
-            //     post_timestamp: "2021-04-25 00:06:11",
-            //     post_title: "My first post",
-            //     post_votes: 2,
-            //     time_passed: "Approximately 930 Minutes Ago"
-            // },{
-            //     handle: "technojd",
-            //     post_content: "Hurray this is my first post",
-            //     post_creator: "technojd",
-            //     post_id: 2,
-            //     post_timestamp: "2021-04-25 00:06:11",
-            //     post_title: "My first post",
-            //     post_votes: 2,
-            //     time_passed: "Approximately 930 Minutes Ago"
-            // },{
-            //     handle: "technojd",
-            //     post_content: "Hurray this is my first post",
-            //     post_creator: "technojd",
-            //     post_id: 3,
-            //     post_timestamp: "2021-04-25 00:06:11",
-            //     post_title: "My first post",
-            //     post_votes: 2,
-            //     time_passed: "Approximately 930 Minutes Ago"
-            // },{
-            //     handle: "technojd",
-            //     post_content: "Hurray this is my first post",
-            //     post_creator: "technojd",
-            //     post_id: 4,
-            //     post_timestamp: "2021-04-25 00:06:11",
-            //     post_title: "My first post",
-            //     post_votes: 2,
-            //     time_passed: "Approximately 930 Minutes Ago"
-            // },{
-            //     handle: "technojd",
-            //     post_content: "Hurray this is my first post",
-            //     post_creator: "technojd",
-            //     post_id: 5,
-            //     post_timestamp: "2021-04-25 00:06:11",
-            //     post_title: "My first post",
-            //     post_votes: 2,
-            //     time_passed: "Approximately 930 Minutes Ago"
-            // },{
-            //     handle: "technojd",
-            //     post_content: "Hurray this is my first post",
-            //     post_creator: "technojd",
-            //     post_id: 6,
-            //     post_timestamp: "2021-04-25 00:06:11",
-            //     post_title: "My first post",
-            //     post_votes: 2,
-            //     time_passed: "Approximately 930 Minutes Ago"
-            // },{
-            //     handle: "technojd",
-            //     post_content: "Hurray this is my first post",
-            //     post_creator: "technojd",
-            //     post_id: 7,
-            //     post_timestamp: "2021-04-25 00:06:11",
-            //     post_title: "My first post",
-            //     post_votes: 2,
-            //     time_passed: "Approximately 930 Minutes Ago"
-            // },{
-            //     handle: "technojd",
-            //     post_content: "Hurray this is my first post",
-            //     post_creator: "technojd",
-            //     post_id: 8,
-            //     post_timestamp: "2021-04-25 00:06:11",
-            //     post_title: "My first post",
-            //     post_votes: 2,
-            //     time_passed: "Approximately 930 Minutes Ago"
-            // },];
 
         }
     }
@@ -178,26 +114,7 @@ Vue.component('post-item',
         template:`
         <div class="container pb-3">
         <div class="card shadow">
-<!--            <div class="card-body">-->
-<!--                <a :href="'#'" v-if="feed" v-on:click="$emit('upvote', post.post_id)">Upvote</a>-->
-<!--                <a :href="'#'" v-if="feed" v-on:click="$emit('downvote', post.post_id)">Downvote</a>-->
-<!--                <div class="row align-items-start">-->
-<!--                    <div class="col">{{ post.handle }}</div>-->
-<!--                    <div class="col"><a :href="postLink">{{ post.post_title }}</a></div>-->
-<!--                    <div class="col">Votes:{{ post.post_votes }}</div>-->
-<!--                </div>-->
-<!--                <div class="row align-items-start">-->
-<!--                    <div class="col">{{ post.post_content }}</div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="card-footer text-muted">-->
-<!--                <div class="row">-->
-<!--                    <div class="col">{{ post.time_passed }}</div>-->
-<!--                  -->
-<!--                </div>-->
-<!--              <button class="btn btn-primary float-end" v-on:click="$emit('deletepost', post.post_id)" v-if="!feed">Delete Post</button>-->
-<!--            </div>-->
-            
+
             <div class="card-body">
                 <a class="card-title h4" :href="postLink">{{ post.post_title }}</a>
                 <h6 class="card-subtitle mb-2 text-muted">{{ post.handle }}</h6>

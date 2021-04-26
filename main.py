@@ -5,17 +5,6 @@ import uuid
 
 app = flask.Flask(__name__, static_folder="static")
 
-@app.route("/api/register", methods=['GET', 'POST'])
-def api_register():
-    if flask.request.method == 'GET':
-        return flask.render_template("register.html")
-    elif flask.request.method == 'POST':
-        data = flask.request.get_json()
-        user = db.User(data['handle'])
-        return {'user_hash': user.user_hash}
-    else:
-        return flask.abort(HTTPStatus.NOT_IMPLEMENTED)
-
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     if flask.request.method == 'GET':
@@ -25,23 +14,6 @@ def register():
         user = db.User(handle)
         return flask.redirect(f'/app/feed/{user.user_hash}')
 
-@app.route("/<user_hash>/feed", methods=['GET'])
-def feed(user_hash):
-    try:
-        posts = db.get_feed_posts(user_hash)
-    except KeyError:
-        return flask.abort(404)
-
-    # return flask.jsonify([{
-    #     'post_title': p.post_title,
-    #     'post_content': p.post_content,
-    #     'post_creator': p.post_creator.handle,
-    #     'post_timestamp': p.post_timestamp,
-    #     'post_id': p.post_id
-    # } for p in posts])
-    return flask.render_template('feed.html', user_hash=user_hash, posts=posts)
-
-
 @app.route("/posts/<post_id>", methods=['GET'])
 def post(post_id):
     try:
@@ -49,25 +21,7 @@ def post(post_id):
     except KeyError:
         return flask.abort(404)
 
-    # return {
-    #     'post_id': p.post_id,
-    #     'post_timestamp': p.post_timestamp,
-    #     'post_creator': p.post_creator.handle,
-    #     'post_title': p.post_title,
-    #     'post_content': p.post_content,
-    #     "post_votes": p.post_votes
-    # }
     return flask.render_template("post.html", post=p)
-
-
-@app.route("/<user_hash>/profile", methods=['GET'])
-def profile(user_hash):
-    try:
-        posts = db.get_profile_posts(user_hash)
-    except KeyError:
-        return flask.abort(404)
-
-    return flask.render_template("profile.html", posts=posts, user_hash=user_hash)
 
 @app.route("/<user_hash>/vote/<post_id>/<direction>", methods=['GET'])
 def postVote(user_hash, post_id, direction):
@@ -115,14 +69,6 @@ def api_feed(user_hash):
         'post_id': p.post_id,
         'time_passed': p.time_passed
     } for p in posts])
-
-@app.route("/<user_hash>/delete/<post_id>", methods=["POST"])
-def delete_post(user_hash, post_id):
-    p = db.Post(int(post_id))
-    if p.post_creator.user_hash == uuid.UUID(user_hash):
-        p.delete_post()
-
-    return flask.redirect(f'/{user_hash}/profile')
 
 @app.route("/api/<user_hash>/delete/<post_id>", methods=['GET'])
 def api_delete_post(user_hash, post_id):
