@@ -178,24 +178,51 @@ Vue.component('post-item',
         template:`
         <div class="container pb-3">
         <div class="card shadow">
+<!--            <div class="card-body">-->
+<!--                <a :href="'#'" v-if="feed" v-on:click="$emit('upvote', post.post_id)">Upvote</a>-->
+<!--                <a :href="'#'" v-if="feed" v-on:click="$emit('downvote', post.post_id)">Downvote</a>-->
+<!--                <div class="row align-items-start">-->
+<!--                    <div class="col">{{ post.handle }}</div>-->
+<!--                    <div class="col"><a :href="postLink">{{ post.post_title }}</a></div>-->
+<!--                    <div class="col">Votes:{{ post.post_votes }}</div>-->
+<!--                </div>-->
+<!--                <div class="row align-items-start">-->
+<!--                    <div class="col">{{ post.post_content }}</div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="card-footer text-muted">-->
+<!--                <div class="row">-->
+<!--                    <div class="col">{{ post.time_passed }}</div>-->
+<!--                  -->
+<!--                </div>-->
+<!--              <button class="btn btn-primary float-end" v-on:click="$emit('deletepost', post.post_id)" v-if="!feed">Delete Post</button>-->
+<!--            </div>-->
+            
             <div class="card-body">
-                <a :href="'#'" v-if="feed" v-on:click="$emit('upvote', post.post_id)">Upvote</a>
-                <a :href="'#'" v-if="feed" v-on:click="$emit('downvote', post.post_id)">Downvote</a>
-                <div class="row align-items-start">
-                    <div class="col">{{ post.handle }}</div>
-                    <div class="col"><a :href="postLink">{{ post.post_title }}</a></div>
-                    <div class="col">Votes:{{ post.post_votes }}</div>
-                </div>
-                <div class="row align-items-start">
-                    <div class="col">{{ post.post_content }}</div>
+                <a class="card-title h4" :href="postLink">{{ post.post_title }}</a>
+                <h6 class="card-subtitle mb-2 text-muted">{{ post.handle }}</h6>
+
+                <div class="card-text">
+                    <div class="row">
+                        <div class="col-md-auto">
+                        <a href="#" class="bi bi-arrow-bar-up" v-if="feed" v-on:click="$emit('upvote', post.post_id)"></a>
+                        <div class="col">Votes: {{ post.post_votes }}</div>
+                        <a href="#" class="bi bi-arrow-bar-down" v-if="feed" v-on:click="$emit('downvote', post.post_id)"></a>
+                    </div>
+                        <div class="col">
+                    {{ post.post_content }}</div>
+                    </div>
                 </div>
             </div>
-            <div class="card-footer text-muted">
+            <div class="card-footer">
                 <div class="row">
-                    <div class="col">{{ post.time_passed }}</div>
-                  
+                    <div class="col">
+                        {{ post.time_passed }}
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-primary float-end" v-on:click="$emit('deletepost', post.post_id)" v-if="!feed">Delete Post</button>
+                    </div>
                 </div>
-              <button class="btn btn-primary float-end" v-on:click="$emit('deletepost', post.post_id)" v-if="!feed">Delete Post</button>
             </div>
         </div>
     </div>

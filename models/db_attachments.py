@@ -5,6 +5,7 @@ from datetime import datetime as dt
 
 def get_connection() -> (sqlite3.Connection, sqlite3.Cursor):
     connection = sqlite3.connect('data/database.db')
+    connection.execute("PRAGMA foreign_keys = ON;")
     return connection, connection.cursor()
 
 
