@@ -11,6 +11,7 @@ function getAllFeed(user_hash, callback) {
 
 Vue.component('pagination',
     {
+        props: ['feed'],
         data: function () {
             return {
                 pdata: [],
@@ -57,6 +58,14 @@ Vue.component('pagination',
                 this.pdata = data;
                 this.pages = Math.ceil(this.pdata.length / 5);
                 this.currentSlice =  this.pdata.slice(idx*5, idx*5 + 5);
+            },
+            handleDelete: function(postid){
+                let found = this.pdata.findIndex(element => element.post_id === postid);
+                this.pdata.splice(found,1);
+                this.initData(this.pdata);
+            },
+            deletepost: function (postid) {
+                fetch("/api/"+USERHASH+"/delete/"+postid).then(response => this.handleDelete(postid));
             }
         },
         template: `
@@ -65,8 +74,10 @@ Vue.component('pagination',
               <post-item v-for="p in currentSlice"
                          v-bind:key="p.id"
                          v-bind:post="p"
+                         v-bind:feed="feed"
                           v-on:upvote="upvote"
-                          v-on:downvote="downvote"></post-item>
+                          v-on:downvote="downvote"
+                          v-on:deletepost="deletepost"></post-item>
             <button v-on:click="prevpage">Prev page</button>
             <button v-on:click="nextpage">Next page</button>
             </div>
@@ -74,7 +85,13 @@ Vue.component('pagination',
           </div>
         `,
         created: function () {
-            fetch('/api/'+USERHASH+"/feed")
+            let handle = "";
+            if (this.feed) {
+                handle = "feed";
+            } else {
+                handle = "profile";
+            }
+            fetch('/api/'+USERHASH+"/"+handle)
                 .then(response => response.json())
                 .then(data => (this.initData(data)));
             // this.pdata = [{
@@ -157,13 +174,13 @@ Vue.component('pagination',
 
 Vue.component('post-item',
     {
-        props:['post'],
+        props:['post', 'feed'],
         template:`
         <div class="container pb-3">
         <div class="card shadow">
             <div class="card-body">
-                <a :href="'#'" v-on:click="$emit('upvote', post.post_id)">Upvote</a>
-                <a :href="'#'" v-on:click="$emit('downvote', post.post_id)">Downvote</a>
+                <a :href="'#'" v-if="feed" v-on:click="$emit('upvote', post.post_id)">Upvote</a>
+                <a :href="'#'" v-if="feed" v-on:click="$emit('downvote', post.post_id)">Downvote</a>
                 <div class="row align-items-start">
                     <div class="col">{{ post.handle }}</div>
                     <div class="col"><a :href="postLink">{{ post.post_title }}</a></div>
@@ -176,7 +193,9 @@ Vue.component('post-item',
             <div class="card-footer text-muted">
                 <div class="row">
                     <div class="col">{{ post.time_passed }}</div>
+                  
                 </div>
+              <button class="btn btn-primary float-end" v-on:click="$emit('deletepost', post.post_id)" v-if="!feed">Delete Post</button>
             </div>
         </div>
     </div>
