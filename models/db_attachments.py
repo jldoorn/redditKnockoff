@@ -30,6 +30,15 @@ class User:
         else:
             self.init_user()
 
+    @staticmethod
+    def savealluser(fpath):
+        conn, cur = get_connection()
+        cur.execute("""SELECT * FROM User""")
+        result = cur.fetchall()
+
+        with open(fpath, "w") as f:
+            f.writelines([f'{r[0]}\t{r[1]}\t{r[2]}\t{r[3]}\t{r[4]}\t{r[5]}\n' for r in result])
+
     @classmethod
     def get_user_from_hash(cls, user_hash: uuid.UUID):
         conn, cur = get_connection()
@@ -132,6 +141,15 @@ class Post:
 
         conn.commit()
 
+    @staticmethod
+    def saveallpost(fpath):
+        conn, cur = get_connection()
+        cur.execute("""SELECT * FROM Post""")
+        result = cur.fetchall()
+
+        with open(fpath, "w") as f:
+            f.writelines([f'{r[0]}\t{r[1]}\t{r[2]}\t{r[3]}\t{r[4]}\n' for r in result])
+
     def _get_time_passed(self):
         td = dt.utcnow() - dt.fromisoformat(self.post_timestamp)
         if td.seconds < (60 * 60 * 24):
@@ -201,6 +219,15 @@ class Vote:
             return True
         else:
             return False
+
+    @staticmethod
+    def saveallvote(fpath):
+        conn, cur = get_connection()
+        cur.execute("""SELECT * FROM Vote""")
+        result = cur.fetchall()
+
+        with open(fpath, "w") as f:
+            f.writelines([f'{r[0]}\t{r[1]}\t{r[2]}\t{r[3]}\n' for r in result])
 
     def _create_vote(self):
         conn, cur = get_connection()
