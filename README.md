@@ -15,7 +15,7 @@
 - VueJS app endpoints for profile and feed. Async requests made to /api
 endpoints for content rendering.
 
-####/app/profile/<user_hash>
+#### /app/profile/<user_hash>
 
 - Profile page for user, allows creation and deletion of posts
 
@@ -29,6 +29,7 @@ endpoints for content rendering.
 
 #### /gettsv/[user/post/vote]
 
+- Creates a new tsv file reflecting current database state
 - Redirects to correct download link
 
 #### /gettsv/download/[user/post/vote].tsv
