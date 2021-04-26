@@ -8,6 +8,8 @@ app = flask.Flask(__name__, static_folder="static")
 app.config['CLIENT_TSV'] = './data/tsvfiles'
 app.config['CLIENT_IMAGE'] = './data/uploads'
 
+
+
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     if flask.request.method == 'GET':
@@ -137,4 +139,9 @@ def getimage(imagepath):
     return flask.send_from_directory(app.config['CLIENT_IMAGE'], imagepath)
 
 if __name__ == '__main__':
+    if "tsvfiles" not in os.listdir("./data"):
+        os.mkdir("./data/tsvfiles")
+    if 'uploads' not in os.listdir('./data'):
+        os.mkdir("./data/uploads")
+
     app.run(port=8000, host='127.0.0.1', debug=True, use_evalex=False)

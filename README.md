@@ -6,9 +6,39 @@
 
 - Redirects to /register
 
+### /image/<image_path>.png
+
+- Dynamic path to user's uploaded profile picture
+
+### /app/
+
+- VueJS app endpoints for profile and feed. Async requests made to /api
+endpoints for content rendering.
+
+####/app/profile/<user_hash>
+
+- Profile page for user, allows creation and deletion of posts
+
+#### /app/feed/<user_hash>
+
+- Feed page for user with async up and down voting
+
+### /gettsv
+
+- Renders template with three download options for users, posts, and votes
+
+#### /gettsv/[user/post/vote]
+
+- Redirects to correct download link
+
+#### /gettsv/download/[user/post/vote].tsv
+
+- Retrieves a saved tsvfile
+
 ### /register
  
 - Account creation page
+- Redirects to /app/feed/<user_hash> of registered user
 
 ### /posts/<post_id>
 
@@ -25,7 +55,7 @@
 - Returns form for user to type a new post with a title.
 - Redirects to user's profile
     
-### /api
+### /api/
 
 - post JSON schema:
     ```
